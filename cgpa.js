@@ -97,5 +97,8 @@ submitBtn.addEventListener("click", (e) => {
 
   sgpa = totalPoint / totalCredit;
   // console.log(sgpa);
-  point.textContent = `${Math.round(sgpa).toFixed(2)}`;
+  // console.log(sgpa.toFixed(2));
+
+  // console.log(Math.round(sgpa));
+  point.textContent = `${sgpa.toFixed(2)}`;
 });
