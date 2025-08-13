@@ -52,7 +52,7 @@ const addCourse = () => {
   deleteBtn.insertAdjacentHTML(
     "beforeend",
     `<a class="SN--${click}" href="#" title="delete icons"
-                ><img class="SN--${click}" src="/images/delete--icon.png" alt=""
+                ><img class="SN--${click}" src="images/delete--icon.png" alt="delete--icon"
               /></a>`
   );
 };
