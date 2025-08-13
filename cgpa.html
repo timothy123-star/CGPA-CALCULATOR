@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,11 +7,53 @@
     <link rel="stylesheet" href="cgpa.css" />
   </head>
   <body>
-    <h1>CGPA CALCULATOR</h1>
+    <div class="container">
+      <div class="h1--container">
+        <h1>CGPA CALCULATOR</h1>
+      </div>
+      <div>
+        <h3 class="sgpa">Semester GPA: <span class="point">0</span></h3>
+      </div>
 
-    <p>I am learning Github and about version control</p>
+      <div class="form--container">
+        <form action="#">
+          <div class="form--inner--container">
+            <div class="course--container flex">
+              <label for="CName">Course Name</label>
+              <input class="SN--0" type="text" value="" />
+            </div>
 
-    <h2>Numerology Project</h2>
+            <div class="option--container flex">
+              <label for="grade">Grade</label>
+              <select class="SN--0 options" name="grade" id="grade" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="C">E</option>
+                <option value="F">F</option>
+              </select>
+            </div>
+
+            <div class="credits--container flex">
+              <label for="credits">Credits</label>
+              <input class="SN--0 C--unit" type="number" value="" required />
+            </div>
+
+            <div class="delete--field">
+              <a class="SN--0" href="#" title="delete icons"
+                ><img class="SN--0" src="/images/delete--icon.png" alt=""
+              /></a>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button class="add">Add course</button>
+            <button type="submit" class="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <script src="cgpa.js"></script>
   </body>
 </html>

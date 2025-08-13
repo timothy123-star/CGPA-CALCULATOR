@@ -1,7 +1,107 @@
-h1 {
-  background-color: tomato;
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #fff5f2;
+  text-align: center;
 }
 
-body {
-  background-color: brown;
+.container {
+  background-color: #f5babb;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.form--inner--container {
+  display: grid;
+  grid-template-columns: 4fr 1fr 2fr 1fr;
+  gap: 0;
+  padding: 1em;
+}
+
+h1 {
+  color: #064232;
+  font-size: 2.1rem;
+}
+
+.sgpa {
+  color: #568f87;
+  font-size: 1.9rem;
+}
+
+label {
+  color: #568f87;
+  font-size: 1.2rem;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+input,
+select {
+  padding: 1em;
+  margin-bottom: 0.2em;
+}
+.course--container input {
+  width: 80%;
+}
+
+.credits--container input {
+  width: 60%;
+}
+
+.delete--field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: auto;
+  height: auto;
+}
+
+a {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+button {
+  color: #fff5f2;
+  background-color: #064232;
+  font-size: 1rem;
+  padding: 1em;
+  border-radius: 20px;
+}
+
+.add {
+  background-color: #568f87;
+  color: #064232;
+  margin-right: 1em;
+}
+
+/* Medium screens */
+@media (min-width: 768px) {
+  .container {
+    padding: 4em;
+    padding-top: 3em;
+  }
+  h1 {
+    font-size: 3rem;
+  }
+  .sgpa {
+    font-size: 2.7rem;
+  }
+  .form--inner--container {
+    gap: 0;
+  }
 }
