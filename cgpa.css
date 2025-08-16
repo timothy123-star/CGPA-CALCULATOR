@@ -2,21 +2,23 @@ body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  background-color: #fff5f2;
+  background-color: #f5babb;
   text-align: center;
 }
 
 .container {
-  background-color: #f5babb;
   display: flex;
   flex-direction: column;
-  gap: 2em;
+
+  background-color: #fff5f2;
+  padding: 2em 0;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 2em;
+
+  margin-top: 0;
 }
 
 .form--inner--container {
@@ -26,9 +28,97 @@ form {
   padding: 1em;
 }
 
+.h1--container {
+  display: flex;
+  padding-bottom: 3em;
+}
 h1 {
   color: #064232;
-  font-size: 2.1rem;
+  font-size: 1.7rem;
+  text-align: left;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+  text-decoration: underline #568f87 0.1em;
+}
+h2 {
+  margin-bottom: -1em;
+}
+
+.circle {
+  border: 0.8em #568f87 solid;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: auto;
+  color: #064232;
+}
+
+.semester--container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 1em 1em;
+}
+
+.semester--0 {
+  flex-shrink: 0;
+  padding: 0.1em 0;
+
+  /* border: 0.1em solid yellow; */
+}
+
+.semester--0 a {
+  /* margin: -1em; */
+  /* border: 0.3em solid purple; */
+}
+
+.semester--0 button {
+  background-color: #fff5f2;
+  color: #064232;
+  border: 0.2em solid #064232;
+}
+
+.semester--0 img {
+  width: 15%;
+  padding-left: 1em;
+  position: relative;
+  bottom: -0.3em;
+}
+
+.add--semester {
+  flex-shrink: 0;
+  padding: 0.5em 0 0 0;
+  /* border: 1em solid green; */
+}
+
+.analysis {
+  text-align: right;
+  padding-right: 2em;
+  color: #064232;
+}
+
+.analysis h4 {
+  font-size: 1.2rem;
+}
+
+#sgpa {
+  font-size: 1.7rem;
+  text-align: left;
+  padding: 0.67em;
+  line-height: 0;
+}
+
+.classless {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1em;
+  padding-right: 2.5em;
+  margin-bottom: 0;
+  color: #064232;
 }
 
 .sgpa {
@@ -52,6 +142,8 @@ input,
 select {
   padding: 1em;
   margin-bottom: 0.2em;
+
+  text-transform: uppercase;
 }
 .course--container input {
   width: 80%;
@@ -73,6 +165,7 @@ select {
 a {
   display: flex;
   justify-content: space-evenly;
+  text-decoration: none;
 }
 
 button {
@@ -81,6 +174,16 @@ button {
   font-size: 1rem;
   padding: 1em;
   border-radius: 20px;
+}
+
+hr {
+  text-align: center;
+  width: 90%;
+  border: 0.01em solid #064232;
+}
+
+footer button {
+  text-align: right;
 }
 
 .add {
@@ -105,6 +208,26 @@ button {
     gap: 0;
   }
   label {
+    font-size: 2rem;
+  }
+  .analysis {
+    padding: 0 10em;
+  }
+  .analysis h4 {
+    font-size: 2rem;
+  }
+  .semester--container {
+    padding: 1em 5em;
+  }
+  .container {
+    padding-left: 5em;
+    padding-right: 5em;
+  }
+  .classless {
+    /* padding-left: 5em; */
+    padding-right: 14em;
+  }
+  .classless h3 {
     font-size: 2rem;
   }
 }
