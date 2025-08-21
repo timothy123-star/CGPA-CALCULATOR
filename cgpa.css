@@ -57,32 +57,28 @@ h2 {
   color: #064232;
 }
 
-.semester--container {
+.semester {
+  text-align: left;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 1em 1em;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.2em;
+  padding: 1em 0.8em;
 }
 
-.semester--0 {
-  flex-shrink: 0;
+.semester--1 {
   padding: 0.1em 0;
-
-  /* border: 0.1em solid yellow; */
 }
 
-.semester--0 a {
-  /* margin: -1em; */
-  /* border: 0.3em solid purple; */
-}
-
-.semester--0 button {
+.semester--1 button {
   background-color: #fff5f2;
   color: #064232;
-  border: 0.2em solid #064232;
+  border: 0.11em solid #064232;
+  padding: 0.9em;
 }
 
-.semester--0 img {
+.semester--1 img {
   width: 15%;
   padding-left: 1em;
   position: relative;
@@ -90,8 +86,9 @@ h2 {
 }
 
 .add--semester {
-  flex-shrink: 0;
-  padding: 0.5em 0 0 0;
+  width: fit-content;
+  justify-self: right;
+  padding: 0.3em 1em 1em 0;
   /* border: 1em solid green; */
 }
 
@@ -174,6 +171,15 @@ button {
   font-size: 1rem;
   padding: 1em;
   border-radius: 20px;
+  cursor: pointer;
+  border: 0;
+}
+
+.myBtn:focus,
+.myBtn.active {
+  background-color: #568f87 !important;
+  border: 0 !important;
+  color: #fff5f2 !important;
 }
 
 hr {
@@ -229,5 +235,9 @@ footer button {
   }
   .classless h3 {
     font-size: 2rem;
+  }
+  #sgpa {
+    font-size: 3rem;
+    text-align: center;
   }
 }

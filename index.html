@@ -13,7 +13,7 @@
       </div>
 
       <div class="circle">
-        <h2>0.00</h2>
+        <h2 class="Cumulative">0.00</h2>
         <p>Cumulative GPA</p>
       </div>
 
@@ -21,12 +21,12 @@
         <h4>Total Units: <span>0</span></h4>
       </div>
       <hr />
-      <div class="semester--container">
-        <!-- <div class="semester"> -->
-        <div class="semester--0">
-          <a href="#"
-            ><button>
-              Semester 1
+
+      <div class="semester">
+        <div class="semester--1">
+          <a href=""
+            ><button type="button" class="myBtn--1 myBtn">
+              Semester <span>1</span>
               <img
                 class="add--delete"
                 class="SN--0"
@@ -35,62 +35,63 @@
               /></button
           ></a>
         </div>
-        <!-- </div> -->
-        <div class="add--semester"><button>Add Semester +</button></div>
       </div>
+      <div class="add--semester"><button>Add Semester +</button></div>
     </header>
 
-    <div class="container">
-      <h3 id="sgpa">Semester GPA: <span class="semester--gpa">0.00</span></h3>
-      <div class="classless">
-        <h3>Semester 1</h3>
-        <h3>Semester Unit: <span class="point">0</span></h3>
+    <section class="section">
+      <div class="myBtn--1 container">
+        <h3 id="sgpa">Semester GPA: <span class="semester--gpa">0.00</span></h3>
+        <div class="classless">
+          <h3>Semester 1</h3>
+          <h3>Semester Unit: <span class="point">0</span></h3>
+        </div>
+        <form action="">
+          <div class="form--inner--container">
+            <div class="course--container flex">
+              <label for="CName">Course Code</label>
+              <input
+                placeholder="E.G.  MAT111"
+                class="SN--0 course--code"
+                type="text"
+                value=""
+              />
+            </div>
+
+            <div class="option--container flex">
+              <label for="grade">Grade</label>
+              <select class="SN--0 options" name="grade" id="grade" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="C">E</option>
+                <option value="F">F</option>
+              </select>
+            </div>
+
+            <div class="credits--container flex">
+              <label for="credits">Credits</label>
+              <input class="SN--0 C--unit" type="number" value="" required />
+            </div>
+
+            <div class="delete--field">
+              <a class="SN--0" href="" title="delete icons"
+                ><img
+                  class="SN--0"
+                  src="images/delete--icon.png"
+                  alt="delete--icon"
+              /></a>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button class="add" type="button">Add Course</button>
+            <button type="submit" class="submit">Submit</button>
+          </div>
+        </form>
       </div>
-      <form action="#">
-        <div class="form--inner--container">
-          <div class="course--container flex">
-            <label for="CName">Course Code</label>
-            <input
-              placeholder="E.G.  MAT111"
-              class="SN--0 course--code"
-              type="text"
-              value=""
-            />
-          </div>
-
-          <div class="option--container flex">
-            <label for="grade">Grade</label>
-            <select class="SN--0 options" name="grade" id="grade" required>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="C">E</option>
-              <option value="F">F</option>
-            </select>
-          </div>
-
-          <div class="credits--container flex">
-            <label for="credits">Credits</label>
-            <input class="SN--0 C--unit" type="number" value="" required />
-          </div>
-
-          <div class="delete--field">
-            <a class="SN--0" href="#" title="delete icons"
-              ><img
-                class="SN--0"
-                src="images/delete--icon.png"
-                alt="delete--icon"
-            /></a>
-          </div>
-        </div>
-
-        <div class="buttons">
-          <button class="add">Add Course</button>
-          <button type="submit" class="submit">Submit</button>
-        </div>
-      </form>
-    </div>
+    </section>
     <hr />
 
     <footer><button>View Analysis</button></footer>
