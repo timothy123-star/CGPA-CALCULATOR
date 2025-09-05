@@ -9,7 +9,7 @@ import express from "express";
 import { type } from "os";
 
 // Replace with your token
-const token = "8257510203:AAHrjzIwtUPrzXtF2MXJzsfmj3JbZIZvbF8";
+const token = "";
 
 // Create bot
 const bot = new TelegramBot(token, { polling: true });
