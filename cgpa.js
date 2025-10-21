@@ -1,316 +1,118 @@
+"use strict";
+
 // Selectors
 
+//Button Selectors
 const addCourseBtn = document.querySelector(".add");
 const submitBtn = document.querySelector(".submit");
 const addSemesterBtn = document.querySelector(".add--semester");
 
+//Container Selectors
 const section = document.querySelector(".section");
 const semester = document.querySelector(".semester");
+const formWrapper = document.querySelector(".form--wrapper");
 
-const creditUnits = () => document.querySelectorAll(".C--unit");
-const gradeNodeList = () => document.querySelectorAll(".options");
-
-const semesterGpa = document.querySelector(".semester--gpa");
+//UI update Selectors
 const cumulativeGPA = document.querySelector(".Cumulative");
+const totalUnits = document.querySelector(".total--units");
 
-const point = document.querySelector(".point");
+//Global Variables
+let click = 1;
+let add = 1;
 
-let click = 0;
+//Global Functions for the Logic
 
-//gradeToPoints
-function gradeToPoints(grade) {
-  switch (grade.toUpperCase()) {
-    case "A":
-      return 5;
-    case "B":
-      return 4;
-    case "C":
-      return 3;
-    case "D":
-      return 2;
-    case "E":
-      return 1;
-    case "F":
-      return 0;
-    default:
-      return null;
-  }
-}
-
-let totalCredit = 0;
-
-let totalPoint = 0;
-
-// Functions
-
-const pairGradesToCreditUnits = (grades, credits) => {
-  const result = {};
-
-  grades.forEach((grade, index) => {
-    result[grade] = credits[index] ?? null; // if credits array is shorter, set null
-  });
-
-  return result;
+// Function to convert grades to its equivalent point
+const gradeToPoint = function (grade) {
+  const gradeObj = {
+    A: 5,
+    B: 4,
+    C: 3,
+    D: 2,
+    E: 1,
+    F: 0,
+  };
+  return gradeObj[grade.toUpperCase()] ?? 0;
 };
 
-const grades = ["a", "b", "c", "d", "e", "f"];
-const credit = [5, 4, 3, 2, 1, 0];
-
-const data = pairGradesToCreditUnits(grades, credit);
-console.log(data);
-
-// Array containing all the Course Code from the form input
-const arrCourseCode = () => {
-  const courseCodeArr = [];
-
-  // course.addEventListener("input", function (e) {
-  //   if (e.target.classList.contains("course--code"))
-  //     courseCodeArr.push(e.target.value.toUpperCase());
-  // });
-
-  console.log(courseCodeArr);
-
-  return courseCodeArr;
-};
-
-arrCourseCode();
-
-// Example
-const deleteBtn = document.querySelector(".delete--field");
-
-const addCourse = (semesterForm) => {
-  const course = semesterForm.querySelector(".course--container");
-  const grade = semesterForm.querySelector(".option--container");
-  const credits = semesterForm.querySelector(".credits--container");
-  const deleteBtn = semesterForm.querySelector(".delete--field");
-
-  course.insertAdjacentHTML(
-    "beforeend",
-    `<input placeholder="E.G.  MAT111" class="SN--${click} course--code" type="text" value="" />`
+//Function to calculate semesterGPA and update it's UI
+const calculateSemesterGPA = function (semesterIndex) {
+  const semesterForm = document.querySelector(
+    `.semester--form[data-semester="${semesterIndex}"]`
   );
 
-  grade.insertAdjacentHTML(
-    "beforeend",
-    `<select class="SN--${click} options" name="grade" id="grade" required>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
-                <option value="F">F</option>
-              </select>`
-  );
+  const rows = semesterForm.querySelectorAll(".form--inner--container");
+  console.log(rows.length);
 
-  credits.insertAdjacentHTML(
-    "beforeend",
-    `<input class="SN--${click} C--unit" type="number" value="" required />`
-  );
+  let totalPoints = 0;
+  let totalCredits = 0;
 
-  deleteBtn.insertAdjacentHTML(
-    "beforeend",
-    `<a class="SN--${click}" href="#" title="delete icons"
-                ><img class="SN--${click}" src="images/delete--icon.png" alt="delete--icon"
-              /></a>`
-  );
-};
+  rows.forEach((row) => {
+    const grade = row.querySelector(".options").value;
+    const credit = parseInt(row.querySelector(".C--unit").value);
+    const gradePoint = gradeToPoint(grade);
+    console.log(credit);
 
-// Semester Unit
-
-//Function to create Array for the Credits unit
-const formArrCreditUnits = (value) => {
-  const unitValues = [...value].map((el) => el.value || 0);
-
-  return unitValues;
-};
-// formArrCreditUnits(creditUnits())
-
-const totalSemesterUnit = (arrUnit) => {
-  let semesterUnit = 0;
-
-  arrUnit.forEach((el) => (semesterUnit += Number(el)));
-
-  return semesterUnit > 0 ? semesterUnit : "0";
-};
-// totalSemesterUnit(formArrCreditUnits)
-
-// Semester grades
-
-// Array of the alphebetic grades
-const formArrGrades = (val) => {
-  const gradeArr = [...val].map((el) => el.value);
-  console.log(gradeArr);
-
-  return gradeArr;
-};
-// formArrGrades(gradeNodeList);
-
-//Array for the corresponding values of the alphabet grade
-const arrGradeValues = (gradeArr) => {
-  const values = gradeArr.map((el) => {
-    return gradeToPoints(el);
-  });
-  console.log(values);
-  return values;
-};
-arrGradeValues(formArrGrades(gradeNodeList()));
-
-//Semester GPA
-const semesterGPAFunc = (gradeval, creditval) => {
-  let gpa = 0;
-  console.log(gradeval);
-  console.log(creditval);
-
-  for (let index = 0; index < gradeval.length; index++) {
-    gpa += gradeval[index] * creditval[index];
-  }
-
-  const semGPA = (
-    gpa / totalSemesterUnit(formArrCreditUnits(creditUnits()))
-  ).toFixed(2);
-  return semGPA > 0 ? semGPA : "0.00";
-};
-
-const submitFunc = (e) => {
-  e.preventDefault();
-
-  // arrGradeValues(formArrGrades(gradeNodeList()));
-};
-
-// Main calculation function (runs instantly on input change)
-
-// Attach event listeners for real-time update
-document.addEventListener("input", (e) => {
-  if (
-    e.target.classList.contains("C--unit") ||
-    e.target.classList.contains("options")
-  ) {
-    // GPA
-    cumulativeGPA.textContent = semesterGPAFunc(
-      arrGradeValues(formArrGrades(gradeNodeList())),
-      formArrCreditUnits(creditUnits())
-    );
-
-    //SGPA
-    semesterGpa.textContent = `${semesterGPAFunc(arrGradeValues(formArrGrades(gradeNodeList())), formArrCreditUnits(creditUnits()))}`;
-  }
-});
-
-// Initial calculation on page load
-// calculateGPA();
-
-// Events
-
-document.addEventListener("input", (e) => {
-  if (e.target.classList.contains("C--unit")) {
-    point.textContent = totalSemesterUnit(formArrCreditUnits(creditUnits()));
-  }
-});
-
-// active Button
-semester.addEventListener("click", function (e) {
-  if (e.target.classList.contains(".myBtn")) {
-    document.querySelectorAll(".myBtn").forEach((btn) => {
-      btn.classList.remove("active");
-    });
-    e.target.classList.add("active");
-  }
-});
-
-submitBtn.addEventListener("click", submitFunc);
-
-let count = 1;
-// let parentDiv;
-
-addSemesterBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  count += 1;
-  semester.insertAdjacentHTML(
-    "beforeend",
-    `          <div class="semester--1 " >
-            <a href=""
-              ><button class="myBtn--${count} myBtn">
-                Semester <span>${count}</span>
-                <img
-                  class="SN--0"
-                  src="images/delete--icon.png"
-                  alt="delete--icon"
-                /></button
-            ></a>
-          </div>
-        </div>`
-  );
-
-  document.querySelectorAll(".myBtn").forEach((btn) => {
-    btn.classList.remove("active");
-  });
-
-  const newBtn = semester.querySelector(".semester--1:last-child .myBtn");
-  console.log(newBtn);
-  newBtn.click();
-
-  newBtn.classList.add("active");
-
-  // active Button
-  semester.addEventListener("click", function (e) {
-    console.log(e.target);
-
-    if (e.target.classList.contains("myBtn")) {
-      e.preventDefault();
-
-      document.querySelectorAll(".myBtn").forEach((btn) => {
-        btn.classList.remove("active");
-      });
-      e.target.classList.add("active");
+    if (!isNaN(credit)) {
+      totalPoints += gradePoint * credit;
+      totalCredits += credit;
     }
   });
-});
 
-// First Btn Active
-document.addEventListener("DOMContentLoaded", (e) => {
-  e.preventDefault();
-  const firstBtn = document.querySelector(".myBtn");
-  console.log(firstBtn);
+  const semGPA =
+    totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
 
-  if (firstBtn) {
-    firstBtn.classList.add("active");
-  }
-});
+  console.log(semGPA);
 
-//Button unique ID
-semester.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (e.target.classList.contains("myBtn")) {
-    var parentDiv = e.target.classList[0];
-  }
-  console.log(parentDiv);
-  if (!parentDiv) return;
-  document
-    .querySelectorAll(".container")
-    .forEach((f) => (f.style.display = "none"));
+  semesterForm.querySelector(".semester--gpa").textContent = semGPA;
+  semesterForm.querySelector(".point").textContent = totalCredits;
 
-  let newFormContainer = section.querySelector(`.${parentDiv}`);
-  console.log(newFormContainer);
+  return { semGPA: parseFloat(semGPA), totalCredits };
+};
 
-  if (!newFormContainer) {
-    //append New formField
-    newFormContainer = document.createElement("div");
-    newFormContainer.classList.add(`${parentDiv}`);
-    newFormContainer.classList.add("container");
-    newFormContainer.style.display = "flex";
+//Function to calculate CGPA and update it's UI
+const calculateCGPA = function () {
+  let totalOverallPoints = 0;
+  let totalOverallCredits = 0;
 
-    newFormContainer.innerHTML = `
-  <h3 id="sgpa">Semester GPA: <span class="semester--gpa">0.00</span></h3>
+  const semesterForms = section.querySelectorAll(".semester--form");
+
+  semesterForms.forEach((form) => {
+    let semData = calculateSemesterGPA(form.dataset.semester);
+
+    totalOverallPoints += semData.semGPA * semData.totalCredits;
+    totalOverallCredits += semData.totalCredits;
+  });
+
+  const CGPA =
+    totalOverallCredits > 0
+      ? (totalOverallPoints / totalOverallCredits).toFixed(2)
+      : "0.00";
+
+  cumulativeGPA.textContent = CGPA;
+  totalUnits.textContent = totalOverallCredits;
+};
+
+//Function for button Event Listeners
+
+//Create new Form Field Function
+const newFormfield = function (click = 1, prop = "afterbegin") {
+  section.insertAdjacentHTML(
+    `${prop}`,
+    `      <div class="semester--form container" data-semester="${click}">
+        <h3 id="sgpa">Semester GPA: <span class="semester--gpa">0.00</span></h3>
         <div class="classless">
-          <h3>Semester 1</h3>
+          <h3>Semester ${click}</h3>
           <h3>Semester Unit: <span class="point">0</span></h3>
         </div>
-        <form action="">
-          <div class="form--inner--container">
+        <form action="" data-semester="${click}">
+        <div class="form--wrapper" data-semester="${click}">
+          <div class="form--inner--container" data-semester="${click}">
             <div class="course--container flex">
               <label for="CName">Course Code</label>
               <input
                 placeholder="E.G.  MAT111"
-                class="SN--${click} course--code"
+                class="SN--0 course--code"
                 type="text"
                 value=""
               />
@@ -318,7 +120,7 @@ semester.addEventListener("click", (e) => {
 
             <div class="option--container flex">
               <label for="grade">Grade</label>
-              <select class="SN--${click} options" name="grade" id="grade" required>
+              <select class="SN--0 options" name="grade" id="grade" required>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
@@ -330,58 +132,266 @@ semester.addEventListener("click", (e) => {
 
             <div class="credits--container flex">
               <label for="credits">Credits</label>
-              <input class="SN--${click} C--unit" type="number" value="" required />
+              <input
+                class="SN--0 C--unit"
+                type="text"
+                pattern="\d"
+                inputmode="numeric"
+                required
+              />
             </div>
 
             <div class="delete--field">
-              <a class="SN--${click}" href="" title="delete icons"
+              <a class="SN--0" href="" title="delete icons"
                 ><img
-                  class="SN--${click}"
+                  data-semester="${click}"
+                  class="SN--0"
                   src="images/delete--icon.png"
                   alt="delete--icon"
               /></a>
             </div>
           </div>
+          </div>
 
-          <div class="buttons">
-            <button class="add" type="button">Add Course</button>
-            <button type="submit" class="submit">Submit</button>
+          <div class="buttons" data-semester="${click}">
+            <button class="add" type="button" data-semester="${click}">
+              Add Course
+            </button>
+            <button type="submit" class="submit">
+              Save
+            </button>
           </div>
         </form>
-        `;
+      </div>`
+  );
+};
 
-    section.appendChild(newFormContainer);
-  }
-
-  newFormContainer.style.display = "flex";
-});
-
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("add")) {
-    e.preventDefault();
-    const semesterForm = e.target.closest(".container");
+//Create new Semester button function
+const addSemesterFunc = function (e) {
+  if (e.target.classList.contains("add++")) {
     click++;
-    addCourse(semesterForm);
-  }
-});
 
-const deleteField = (e) => {
-  if (e.target.closest(".delete--field")) {
-    e.preventDefault();
-    const child = e.target.classList[0];
-    console.log(child);
-    const formInnerContainer = e.target.closest(".delete--field").parentElement;
-    console.log(formInnerContainer);
+    //add new semeter button
+    semester.insertAdjacentHTML(
+      "beforeend",
+      `        <div class="semester--1" data-semester="${click}">
+          <a href=""
+            ><button type="button" class="myBtn" data-semester="${click}">
+              Semester <span>${click}</span>
+              <img
+                class="add--delete SN--0"
+                data-semester="${click}"
+                src="images/delete--icon.png"
+                alt="delete--icon"
+              /></button
+          ></a>
+        </div>`
+    );
 
-    const all = [...formInnerContainer.querySelectorAll(`.${child}`)];
-    console.log(all);
-
-    all
-      .filter((val) => val.classList[0].length < 6)
-      .forEach((el) => el.remove());
+    //Create New Form Field
+    newFormfield(click, "beforeend");
+    //activating focus, active and click function
+    const newSemBtn = semester.lastElementChild.querySelector(".myBtn");
+    newSemBtn.click();
   }
 };
 
+//Display Semester Form Function
+const showSemesterForm = function (semesterIndex) {
+  const semesterForm = document.querySelector(
+    `.semester--form[data-semester="${semesterIndex}"]`
+  );
+  console.log(semesterIndex);
+  console.log(semesterForm);
+
+  section.querySelectorAll(".semester--form").forEach((form) => {
+    form.style.display = "none";
+  });
+
+  semesterForm.style.display = "block";
+};
+
+// Handle Each Semester Button Clicks
+const handleSemesterClick = function (e) {
+  if (e.target.classList.contains("myBtn")) {
+    const clicked = e.target;
+    semester.querySelectorAll(".myBtn").forEach((btn) => {
+      btn.classList.remove("active");
+    });
+
+    clicked.classList.add("active");
+
+    const semesterIndex = clicked.dataset.semester;
+
+    showSemesterForm(semesterIndex);
+  }
+};
+
+//Delete Semester Button and It's Form Field Func
+const handleSemesterDeletion = function (e) {
+  if (e.target.classList.contains("add--delete")) {
+    const delField = e.target.closest(`.semester--1`);
+
+    const btnNum = Number(e.target.dataset.semester);
+    const formToRemove = section.querySelector(
+      `.semester--form[data-semester="${btnNum}"]`
+    );
+
+    if (btnNum !== 1) {
+      click--;
+
+      delField.remove();
+
+      if (formToRemove) formToRemove.remove();
+
+      const semButtons = semester.querySelectorAll(".semester--1");
+
+      semButtons.forEach((child, index) => {
+        const newNum = index + 1;
+
+        child.dataset.semester = newNum;
+        console.log(child);
+
+        const btnContent = child.querySelector(".myBtn");
+
+        btnContent.dataset.semester = newNum;
+        console.log(btnContent);
+
+        btnContent.querySelector("span").textContent = `${newNum}`;
+        btnContent.querySelector(".add--delete").dataset.semester = newNum;
+
+        // Trigger focus on the preceding button
+        const preceding = semester.querySelector(
+          `.myBtn[data-semester="${btnNum - 1}"]`
+        );
+
+        if (preceding) preceding.click();
+        else if (semButtons.length > 0) semButtons[0].click(); // fallback to first semester
+      });
+
+      //Re-index forms
+      const forms = section.querySelectorAll(`.semester--form`);
+
+      forms.forEach((form, index) => {
+        const newNum = index + 1;
+
+        form.dataset.semester = newNum;
+        console.log(form);
+
+        form.querySelector("form").dataset.semester = newNum;
+        form.querySelector(".form--wrapper").dataset.semester = newNum;
+        form.querySelector(".form--inner--container").dataset.semester = newNum;
+        form.querySelector(".buttons").dataset.semester = newNum;
+        form.querySelector(".add").dataset.semester = newNum;
+      });
+    } else if (btnNum === 1) {
+      console.log(formToRemove);
+      if (formToRemove) formToRemove.remove();
+      console.log(btnNum);
+
+      const clicked = semester.querySelector(
+        `.myBtn[data-semester="${btnNum}"]`
+      );
+      console.log(clicked);
+
+      newFormfield();
+      clicked.click();
+    }
+
+    calculateCGPA();
+  }
+};
+
+//Add new Form Input Row Function
+const addCourseFunc = function (e) {
+  if (e.target.classList.contains("add")) {
+    add++;
+    const addCourseIndex = e.target.dataset.semester;
+
+    const semFormContainer = document.querySelector(
+      `.form--wrapper[data-semester="${addCourseIndex}"]`
+    );
+
+    // console.log(semFormContainer);
+
+    semFormContainer.insertAdjacentHTML(
+      "beforeend",
+      `            <div class="form--inner--container" data-semester="${add}">
+              <div class="course--container flex">
+                <input
+                  placeholder="E.G.  MAT111"
+                  class="SN--0 course--code"
+                  type="text"
+                  value=""
+                />
+              </div>
+              <div class="option--container flex">
+            
+                <select class="SN--0 options" name="grade" id="grade" required>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                  <option value="C">E</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+
+              <div class="credits--container flex">
+                <input
+                  class="SN--0 C--unit"
+                  type="text"
+                  pattern="\d"
+                  inputmode="numeric"
+                  required
+                />
+              </div>
+
+              <div class="delete--field">
+                <a class="SN--0" href="" title="delete icons"
+                  ><img
+                    data-semester="1"
+                    class="SN--0"
+                    src="images/delete--icon.png"
+                    alt="delete--icon"
+                /></a>
+              </div>
+            </div>`
+    );
+  }
+};
+
+//Event Listeners
+
+//Input changes Event listener
+document.addEventListener("input", (e) => {
+  if (
+    e.target.classList.contains("options") ||
+    e.target.classList.contains("C--unit")
+  ) {
+    const semesterIndex = e.target.closest(".semester--form").dataset.semester;
+    calculateSemesterGPA(semesterIndex);
+    calculateCGPA();
+  }
+});
+
+//Add Semester Event listener
+addSemesterBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  addSemesterFunc(e);
+});
+
+semester.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  handleSemesterClick(e);
+
+  handleSemesterDeletion(e);
+});
+
 section.addEventListener("click", (e) => {
-  deleteField(e);
+  e.preventDefault();
+
+  addCourseFunc(e);
 });
