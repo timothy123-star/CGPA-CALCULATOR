@@ -250,19 +250,17 @@ const handleSemesterDeletion = function (e) {
         const newNum = index + 1;
 
         child.dataset.semester = newNum;
-        console.log(child);
 
         const btnContent = child.querySelector(".myBtn");
 
         btnContent.dataset.semester = newNum;
-        console.log(btnContent);
 
         btnContent.querySelector("span").textContent = `${newNum}`;
         btnContent.querySelector(".add--delete").dataset.semester = newNum;
 
         // Trigger focus on the preceding button
         const preceding = semester.querySelector(
-          `.myBtn[data-semester="${btnNum - 1}"]`
+          `.myBtn[data-semester="${newNum}"]`
         );
 
         if (preceding) preceding.click();
