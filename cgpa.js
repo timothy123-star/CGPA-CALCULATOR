@@ -42,7 +42,6 @@ const calculateSemesterGPA = function (semesterIndex) {
   );
 
   const rows = semesterForm.querySelectorAll(".form--inner--container");
-  console.log(rows.length);
 
   let totalPoints = 0;
   let totalCredits = 0;
@@ -51,7 +50,6 @@ const calculateSemesterGPA = function (semesterIndex) {
     const grade = row.querySelector(".options").value;
     const credit = parseInt(row.querySelector(".C--unit").value);
     const gradePoint = gradeToPoint(grade);
-    console.log(credit);
 
     if (!isNaN(credit)) {
       totalPoints += gradePoint * credit;
@@ -61,8 +59,6 @@ const calculateSemesterGPA = function (semesterIndex) {
 
   const semGPA =
     totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
-
-  console.log(semGPA);
 
   semesterForm.querySelector(".semester--gpa").textContent = semGPA;
   semesterForm.querySelector(".point").textContent = totalCredits;
@@ -145,7 +141,7 @@ const newFormfield = function (click = 1, prop = "afterbegin") {
               <a class="SN--0" href="" title="delete icons"
                 ><img
                   data-semester="${click}"
-                  class="SN--0"
+                  class="delete-row--icon SN--0"
                   src="images/delete--icon.png"
                   alt="delete--icon"
               /></a>
@@ -201,8 +197,6 @@ const showSemesterForm = function (semesterIndex) {
   const semesterForm = document.querySelector(
     `.semester--form[data-semester="${semesterIndex}"]`
   );
-  console.log(semesterIndex);
-  console.log(semesterForm);
 
   section.querySelectorAll(".semester--form").forEach((form) => {
     form.style.display = "none";
@@ -215,6 +209,7 @@ const showSemesterForm = function (semesterIndex) {
 const handleSemesterClick = function (e) {
   if (e.target.classList.contains("myBtn")) {
     const clicked = e.target;
+
     semester.querySelectorAll(".myBtn").forEach((btn) => {
       btn.classList.remove("active");
     });
@@ -238,11 +233,10 @@ const handleSemesterDeletion = function (e) {
     );
 
     if (btnNum !== 1) {
-      click--;
-
       delField.remove();
 
       if (formToRemove) formToRemove.remove();
+      click--;
 
       const semButtons = semester.querySelectorAll(".semester--1");
 
@@ -255,16 +249,8 @@ const handleSemesterDeletion = function (e) {
 
         btnContent.dataset.semester = newNum;
 
-        btnContent.querySelector("span").textContent = `${newNum}`;
+        btnContent.querySelector("span").textContent = newNum;
         btnContent.querySelector(".add--delete").dataset.semester = newNum;
-
-        // Trigger focus on the preceding button
-        const preceding = semester.querySelector(
-          `.myBtn[data-semester="${newNum}"]`
-        );
-
-        if (preceding) preceding.click();
-        else if (semButtons.length > 0) semButtons[0].click(); // fallback to first semester
       });
 
       //Re-index forms
@@ -274,7 +260,6 @@ const handleSemesterDeletion = function (e) {
         const newNum = index + 1;
 
         form.dataset.semester = newNum;
-        console.log(form);
 
         form.querySelector("form").dataset.semester = newNum;
         form.querySelector(".form--wrapper").dataset.semester = newNum;
@@ -282,22 +267,24 @@ const handleSemesterDeletion = function (e) {
         form.querySelector(".buttons").dataset.semester = newNum;
         form.querySelector(".add").dataset.semester = newNum;
       });
-    } else if (btnNum === 1) {
-      console.log(formToRemove);
-      if (formToRemove) formToRemove.remove();
-      console.log(btnNum);
 
-      const clicked = semester.querySelector(
-        `.myBtn[data-semester="${btnNum}"]`
+      // Trigger focus on the last button
+      const lastButton = semester.querySelector(
+        `.myBtn[data-semester="${semButtons.length}"]`
       );
-      console.log(clicked);
 
+      if (lastButton) lastButton.click();
+      else if (semButtons.length > 0) semButtons[0].click(); // fallback to first semester
+    } else if (btnNum === 1) {
+      if (formToRemove) formToRemove.remove();
       newFormfield();
-      clicked.click();
-    }
+      semester.querySelector(`.myBtn[data-semester="1"]`)?.click();
 
-    calculateCGPA();
+      calculateCGPA();
+      return;
+    }
   }
+  return;
 };
 
 //Add new Form Input Row Function
@@ -314,7 +301,7 @@ const addCourseFunc = function (e) {
 
     semFormContainer.insertAdjacentHTML(
       "beforeend",
-      `            <div class="form--inner--container" data-semester="${add}">
+      `            <div class="form--inner--container">
               <div class="course--container flex">
                 <input
                   placeholder="E.G.  MAT111"
@@ -349,13 +336,38 @@ const addCourseFunc = function (e) {
                 <a class="SN--0" href="" title="delete icons"
                   ><img
                     data-semester="1"
-                    class="SN--0"
+                    class="delete-row--icon SN--0"
                     src="images/delete--icon.png"
                     alt="delete--icon"
                 /></a>
               </div>
             </div>`
     );
+  }
+};
+
+//Function to delete Form input Row
+const deleteFormInputRow = function (e) {
+  if (e.target.classList.contains("delete-row--icon")) {
+    const rowToDelete = e.target.closest(".form--inner--container");
+
+    const checkDatasetNum = rowToDelete?.dataset?.semester;
+
+    const rowToDeleteWrapperNum =
+      e.target.closest(".semester--form").dataset.semester;
+
+    if (checkDatasetNum) {
+      rowToDelete
+        .querySelectorAll("input, select,textarea")
+        .forEach((field) => {
+          field.value = "";
+        });
+    } else {
+      rowToDelete.remove();
+    }
+
+    calculateSemesterGPA(rowToDeleteWrapperNum);
+    calculateCGPA();
   }
 };
 
@@ -392,4 +404,6 @@ section.addEventListener("click", (e) => {
   e.preventDefault();
 
   addCourseFunc(e);
+
+  deleteFormInputRow(e);
 });

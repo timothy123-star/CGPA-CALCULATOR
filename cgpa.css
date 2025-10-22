@@ -86,9 +86,11 @@ h2 {
 }
 
 .add--semester {
+  display: flex;
+  gap: 4.3em;
   width: fit-content;
   justify-self: right;
-  padding: 0.3em 1em 1em 0;
+  padding: 3em 1em 1em 0;
   /* border: 1em solid green; */
 }
 
@@ -99,7 +101,7 @@ h2 {
 }
 
 .analysis h4 {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
 #sgpa {
