@@ -87,10 +87,10 @@ h2 {
 
 .add--semester {
   display: flex;
-  gap: 4.3em;
-  width: fit-content;
-  justify-self: right;
-  padding: 3em 1em 1em 0;
+  justify-content: space-between;
+  /* width: max-content; */
+  /* justify-self: right; */
+  padding: 3em 1em 1em 1em;
   /* border: 1em solid green; */
 }
 
