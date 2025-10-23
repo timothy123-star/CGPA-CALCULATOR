@@ -24,16 +24,15 @@
 
       <div class="semester">
         <div class="semester--1" data-semester="1">
-          <a href=""
-            ><button type="button" class="myBtn active" data-semester="1">
-              Semester <span>1</span>
-              <img
-                class="add--delete SN--0"
-                data-semester="1"
-                src="images/delete--icon.png"
-                alt="delete--icon"
-              /></button
-          ></a>
+          <button type="button" class="myBtn active" data-semester="1">
+            Semester <span>1</span>
+            <img
+              class="add--delete SN--0"
+              data-semester="1"
+              src="images/delete--icon.png"
+              alt="delete--icon"
+            />
+          </button>
         </div>
       </div>
       <div class="add--semester">
@@ -64,12 +63,12 @@
 
               <div class="option--container flex">
                 <label for="grade">Grade</label>
-                <select class="SN--0 options" name="grade" id="grade" required>
+                <select class="SN--0 options" name="grade" required>
                   <option value="A">A</option>
                   <option value="B">B</option>
                   <option value="C">C</option>
                   <option value="D">D</option>
-                  <option value="C">E</option>
+                  <option value="E">E</option>
                   <option value="F">F</option>
                 </select>
               </div>
@@ -100,12 +99,31 @@
             <button class="add" type="button" data-semester="1">
               Add Course
             </button>
-            <button type="submit" class="submit">Save</button>
+            <button type="button" class="submit">Save</button>
           </div>
         </form>
       </div>
     </section>
     <hr />
+
+    <bottom>
+      <!-- Chart Controls -->
+      <div class="chart--section">
+        <div class="chart--controls">
+          <button id="toggleChartType">Switch Chart Type</button>
+          <button id="downloadPDF">Download Report (PDF)</button>
+        </div>
+
+        <canvas id="sgpaChart" width="400" height="200"></canvas>
+        <canvas id="gradeChart" width="400" height="200"></canvas>
+      </div>
+    </bottom>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- jsPDF (for PDF export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="cgpa.js"></script>
   </body>

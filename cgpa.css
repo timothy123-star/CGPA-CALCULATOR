@@ -204,6 +204,11 @@ footer button {
   margin-right: 1em;
 }
 
+.error {
+  border: 2px solid red;
+  background-color: #ffecec;
+}
+
 /* Medium screens */
 @media (min-width: 768px) {
   .container {

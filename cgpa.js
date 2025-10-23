@@ -1,5 +1,7 @@
 "use strict";
 
+// import Chart from "chart.js/auto";
+
 // Selectors
 
 //Button Selectors
@@ -17,8 +19,10 @@ const cumulativeGPA = document.querySelector(".Cumulative");
 const totalUnits = document.querySelector(".total--units");
 
 //Global Variables
-let click = 1;
-let add = 1;
+// let click = document.querySelectorAll(".semester--form").length;
+
+const semesterGPAs = [];
+const gradeCounts = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0 };
 
 //Global Functions for the Logic
 
@@ -48,20 +52,25 @@ const calculateSemesterGPA = function (semesterIndex) {
 
   rows.forEach((row) => {
     const grade = row.querySelector(".options").value;
-    const credit = parseInt(row.querySelector(".C--unit").value);
+    const credit = parseFloat(row.querySelector(".C--unit").value);
     const gradePoint = gradeToPoint(grade);
 
-    if (!isNaN(credit)) {
+    if (grade && !isNaN(credit) && credit > 0) {
       totalPoints += gradePoint * credit;
       totalCredits += credit;
+      gradeCounts[grade] = (gradeCounts[grade] || 0) + 1;
     }
   });
 
   const semGPA =
-    totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
+    totalCredits > 0
+      ? (totalPoints / totalCredits).toFixed(2)
+      : parseFloat("0.00");
 
   semesterForm.querySelector(".semester--gpa").textContent = semGPA;
   semesterForm.querySelector(".point").textContent = totalCredits;
+
+  semesterGPAs[semesterIndex - 1] = parseFloat(semGPA);
 
   return { semGPA: parseFloat(semGPA), totalCredits };
 };
@@ -116,12 +125,12 @@ const newFormfield = function (click = 1, prop = "afterbegin") {
 
             <div class="option--container flex">
               <label for="grade">Grade</label>
-              <select class="SN--0 options" name="grade" id="grade" required>
+              <select class="SN--0 options" name="grade" required>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
                 <option value="D">D</option>
-                <option value="C">E</option>
+                <option value="E">E</option>
                 <option value="F">F</option>
               </select>
             </div>
@@ -153,7 +162,7 @@ const newFormfield = function (click = 1, prop = "afterbegin") {
             <button class="add" type="button" data-semester="${click}">
               Add Course
             </button>
-            <button type="submit" class="submit">
+            <button type="button" class="submit">
               Save
             </button>
           </div>
@@ -165,14 +174,14 @@ const newFormfield = function (click = 1, prop = "afterbegin") {
 //Create new Semester button function
 const addSemesterFunc = function (e) {
   if (e.target.classList.contains("add++")) {
-    click++;
+    const click = document.querySelectorAll(".semester--form").length + 1;
+    // click++;
 
     //add new semeter button
     semester.insertAdjacentHTML(
       "beforeend",
       `        <div class="semester--1" data-semester="${click}">
-          <a href=""
-            ><button type="button" class="myBtn" data-semester="${click}">
+          <button type="button" class="myBtn" data-semester="${click}">
               Semester <span>${click}</span>
               <img
                 class="add--delete SN--0"
@@ -180,11 +189,12 @@ const addSemesterFunc = function (e) {
                 src="images/delete--icon.png"
                 alt="delete--icon"
               /></button
-          ></a>
+          >
         </div>`
     );
 
     //Create New Form Field
+
     newFormfield(click, "beforeend");
     //activating focus, active and click function
     const newSemBtn = semester.lastElementChild.querySelector(".myBtn");
@@ -197,6 +207,8 @@ const showSemesterForm = function (semesterIndex) {
   const semesterForm = document.querySelector(
     `.semester--form[data-semester="${semesterIndex}"]`
   );
+
+  if (!semesterForm) return;
 
   section.querySelectorAll(".semester--form").forEach((form) => {
     form.style.display = "none";
@@ -236,7 +248,7 @@ const handleSemesterDeletion = function (e) {
       delField.remove();
 
       if (formToRemove) formToRemove.remove();
-      click--;
+      // click--;
 
       const semButtons = semester.querySelectorAll(".semester--1");
 
@@ -269,6 +281,8 @@ const handleSemesterDeletion = function (e) {
       });
 
       // Trigger focus on the last button
+      // const click = document.querySelectorAll(".semester--form").length;
+
       const lastButton = semester.querySelector(
         `.myBtn[data-semester="${semButtons.length}"]`
       );
@@ -279,18 +293,16 @@ const handleSemesterDeletion = function (e) {
       if (formToRemove) formToRemove.remove();
       newFormfield();
       semester.querySelector(`.myBtn[data-semester="1"]`)?.click();
-
-      calculateCGPA();
-      return;
     }
   }
+  calculateCGPA();
+  updateCharts();
   return;
 };
 
 //Add new Form Input Row Function
 const addCourseFunc = function (e) {
   if (e.target.classList.contains("add")) {
-    add++;
     const addCourseIndex = e.target.dataset.semester;
 
     const semFormContainer = document.querySelector(
@@ -312,12 +324,12 @@ const addCourseFunc = function (e) {
               </div>
               <div class="option--container flex">
             
-                <select class="SN--0 options" name="grade" id="grade" required>
+                <select class="SN--0 options" name="grade" required>
                   <option value="A">A</option>
                   <option value="B">B</option>
                   <option value="C">C</option>
                   <option value="D">D</option>
-                  <option value="C">E</option>
+                  <option value="E">E</option>
                   <option value="F">F</option>
                 </select>
               </div>
@@ -368,7 +380,41 @@ const deleteFormInputRow = function (e) {
 
     calculateSemesterGPA(rowToDeleteWrapperNum);
     calculateCGPA();
+    updateCharts();
   }
+};
+
+const saveToDataBase = function (e) {
+  if (!e.target.classList.contains("submit")) return;
+
+  console.log(e.target);
+
+  const allForms = document.querySelectorAll(".semester--form");
+  console.log(allForms);
+
+  let allFilled = true;
+
+  allForms.forEach((form) => {
+    const inputs = form.querySelectorAll("input, select");
+    console.log(inputs);
+
+    inputs.forEach((input) => {
+      if (input.value.trim() === "") {
+        allFilled = false;
+        input.classList.add("error");
+      } else {
+        input.classList.remove("error");
+      }
+    });
+  });
+
+  if (!allFilled) {
+    alert(" Please fill all course fields before saving.");
+    e.stopPropagation();
+    return;
+  }
+
+  console.log("✅ All fields filled. You can now save to database.");
 };
 
 //Event Listeners
@@ -382,6 +428,7 @@ document.addEventListener("input", (e) => {
     const semesterIndex = e.target.closest(".semester--form").dataset.semester;
     calculateSemesterGPA(semesterIndex);
     calculateCGPA();
+    updateCharts();
   }
 });
 
@@ -401,9 +448,119 @@ semester.addEventListener("click", (e) => {
 });
 
 section.addEventListener("click", (e) => {
-  e.preventDefault();
+  if (
+    e.target.classList.contains("add") ||
+    e.target.classList.contains("delete-row--icon")
+  )
+    e.preventDefault();
 
   addCourseFunc(e);
 
   deleteFormInputRow(e);
+
+  saveToDataBase(e);
+});
+
+//Chart Logic
+let sgpaChart, gradeChart;
+let chartType = "line"; // default type
+
+function updateCharts() {
+  const labels = semesterGPAs.map((_, i) => `Semester ${i + 1}`);
+  const sgpaData = semesterGPAs;
+
+  // Destroy previous charts before re-rendering (avoids duplicates)
+  if (sgpaChart) sgpaChart.destroy();
+  if (gradeChart) gradeChart.destroy();
+
+  // 🎓 SGPA Trend Chart (switchable)
+  const sgpaCtx = document.getElementById("sgpaChart").getContext("2d");
+  sgpaChart = new Chart(sgpaCtx, {
+    type: chartType,
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "SGPA per Semester",
+          data: sgpaData,
+          borderWidth: 2,
+          borderColor: "rgba(54, 162, 235, 1)",
+          backgroundColor: "rgba(54, 162, 235, 0.3)",
+          fill: true,
+          tension: 0.3,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, max: 5 } },
+      plugins: {
+        legend: { display: true },
+        title: { display: true, text: "SGPA Trend" },
+      },
+    },
+  });
+
+  // 🥧 Grade Distribution (Pie Chart)
+  const gradeCtx = document.getElementById("gradeChart").getContext("2d");
+  gradeChart = new Chart(gradeCtx, {
+    type: "pie",
+    data: {
+      labels: Object.keys(gradeCounts),
+      datasets: [
+        {
+          label: "Grade Distribution",
+          data: Object.values(gradeCounts),
+          backgroundColor: [
+            "#4caf50",
+            "#2196f3",
+            "#ffc107",
+            "#ff9800",
+            "#f44336",
+            "#9e9e9e",
+          ],
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: { display: true, text: "Grade Distribution" },
+      },
+    },
+  });
+}
+
+//Chart Button Logic
+// 🔄 Switch between Line and Bar chart
+document.getElementById("toggleChartType").addEventListener("click", () => {
+  chartType = chartType === "line" ? "bar" : "line";
+  updateCharts();
+});
+
+// 📥 Download both charts as PDF
+document.getElementById("downloadPDF").addEventListener("click", async () => {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: "portrait", unit: "px", format: "a4" });
+
+  // Capture the charts as base64 images
+  const sgpaImg = sgpaChart.toBase64Image();
+  const gradeImg = gradeChart.toBase64Image();
+
+  // Add a title
+  pdf.setFontSize(20);
+  pdf.text("📘 CGPA Calculator Report", 100, 30);
+
+  // Add CGPA summary
+  const CGPA = document.querySelector(".Cumulative").textContent;
+  const totalUnits = document.querySelector(".total--units").textContent;
+  pdf.setFontSize(14);
+  pdf.text(`Cumulative GPA: ${CGPA}`, 40, 60);
+  pdf.text(`Total Units: ${totalUnits}`, 40, 80);
+
+  // Add charts
+  pdf.addImage(sgpaImg, "PNG", 20, 100, 250, 150);
+  pdf.addImage(gradeImg, "PNG", 20, 270, 250, 150);
+
+  // Save PDF
+  pdf.save("CGPA_Report.pdf");
 });
