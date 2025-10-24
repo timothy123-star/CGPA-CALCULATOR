@@ -209,6 +209,15 @@ footer button {
   background-color: #ffecec;
 }
 
+.chart--section {
+  padding: 2em;
+}
+
+.chart--controls {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Medium screens */
 @media (min-width: 768px) {
   .container {

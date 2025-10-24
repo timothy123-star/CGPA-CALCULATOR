@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="add--semester">
-        <footer><button>View Analysis</button></footer>
+        <a href="#analyze"><button>View Analysis</button></a>
         <button class="add++">Add Semester +</button>
       </div>
     </header>
@@ -108,7 +108,7 @@
 
     <bottom>
       <!-- Chart Controls -->
-      <div class="chart--section">
+      <div id="analyze" class="chart--section">
         <div class="chart--controls">
           <button id="toggleChartType">Switch Chart Type</button>
           <button id="downloadPDF">Download Report (PDF)</button>
@@ -118,6 +118,35 @@
         <canvas id="gradeChart" width="400" height="200"></canvas>
       </div>
     </bottom>
+
+    <template id="semesterTemplate">
+      <div class="semester--form container" data-semester="">
+        <form class="form--wrapper" data-semester="">
+          <div class="form--inner--container">
+            <div class="course--row">
+              <input
+                type="text"
+                class="course-name"
+                placeholder="Course Name"
+              />
+              <input type="number" class="course-unit" placeholder="Unit" />
+              <select class="course-grade">
+                <option value="">Grade</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+              </select>
+            </div>
+          </div>
+          <div class="buttons" data-semester="">
+            <button type="button" class="add">Add Course</button>
+          </div>
+        </form>
+      </div>
+    </template>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
