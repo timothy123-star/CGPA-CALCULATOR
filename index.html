@@ -119,30 +119,82 @@
       </div>
     </bottom>
 
+    <!-- Templates -->
+
+    <!-- Add Semester Template -->
+    <template id="addSemesterTemplate"
+      ><div class="semester--1" data-semester="">
+        <button type="button" class="myBtn active" data-semester="">
+          Semester <span></span>
+          <img
+            class="add--delete SN--0"
+            data-semester=""
+            src="images/delete--icon.png"
+            alt="delete--icon"
+          />
+        </button></div
+    ></template>
+
+    <!-- Add new Form Field Template -->
     <template id="semesterTemplate">
       <div class="semester--form container" data-semester="">
-        <form class="form--wrapper" data-semester="">
-          <div class="form--inner--container">
-            <div class="course--row">
-              <input
-                type="text"
-                class="course-name"
-                placeholder="Course Name"
-              />
-              <input type="number" class="course-unit" placeholder="Unit" />
-              <select class="course-grade">
-                <option value="">Grade</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
-                <option value="F">F</option>
-              </select>
+        <h3 id="sgpa">Semester GPA: <span class="semester--gpa">0.00</span></h3>
+        <div class="classless">
+          <h3></h3>
+          <h3>Semester Unit: <span class="point">0</span></h3>
+        </div>
+        <form action="" data-semester="">
+          <div class="form--wrapper" data-semester="">
+            <div class="form--inner--container" data-semester="">
+              <div class="course--container flex">
+                <label for="CName">Course Code</label>
+                <input
+                  placeholder="E.G.  MAT111"
+                  class="SN--0 course--code"
+                  type="text"
+                  value=""
+                />
+              </div>
+
+              <div class="option--container flex">
+                <label for="grade">Grade</label>
+                <select class="SN--0 options" name="grade" required>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                  <option value="E">E</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+
+              <div class="credits--container flex">
+                <label for="credits">Credits</label>
+                <input
+                  class="SN--0 C--unit"
+                  type="text"
+                  pattern="\d"
+                  inputmode="numeric"
+                  required
+                />
+              </div>
+
+              <div class="delete--field">
+                <a class="SN--0" href="" title="delete icons"
+                  ><img
+                    class="delete-row--icon SN--0"
+                    src="images/delete--icon.png"
+                    alt="delete--icon"
+                /></a>
+              </div>
             </div>
           </div>
+
           <div class="buttons" data-semester="">
-            <button type="button" class="add">Add Course</button>
+            <button class="add" type="button" data-semester="">
+              Add Course
+            </button>
+            <button type="button" class="submit">Save</button>
           </div>
         </form>
       </div>
