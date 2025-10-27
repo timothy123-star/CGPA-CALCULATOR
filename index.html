@@ -12,6 +12,8 @@
         <h1>GPA CALCULATOR</h1>
       </div>
 
+      <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+
       <div class="circle">
         <h2 class="Cumulative">0.00</h2>
         <p>Cumulative GPA</p>
@@ -105,13 +107,14 @@
       </div>
     </section>
     <hr />
+    <button id="clearData" class="clear-btn">Clear Saved Data</button>
 
     <bottom>
       <!-- Chart Controls -->
       <div id="analyze" class="chart--section">
         <div class="chart--controls">
           <button id="toggleChartType">Switch Chart Type</button>
-          <button id="downloadPDF">Download Report (PDF)</button>
+          <button id="downloadPDF">Download Report</button>
         </div>
 
         <canvas id="sgpaChart" width="400" height="200"></canvas>

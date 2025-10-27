@@ -1,3 +1,95 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --card-bg: #f7f7f7;
+  --accent-color: #007bff;
+}
+
+.dark-mode {
+  --bg-color: #121212;
+  --text-color: #f5f5f5;
+  --card-bg: #1e1e1e;
+  --accent-color: #66b2ff;
+}
+
+/* Apply them globally */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* Example of usage on other elements */
+/* 🌙 Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #f5f5f5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Make all input fields dark */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+/* Buttons */
+body.dark-mode button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+body.dark-mode button:hover {
+  background-color: #555;
+}
+
+/* Cards, forms, or containers */
+body.dark-mode .semester--form,
+body.dark-mode .form--inner--container,
+body.dark-mode .container,
+body.dark-mode .card {
+  background-color: #1c1c1c;
+  color: #f5f5f5;
+  border-color: #333;
+}
+
+/* Headings and labels */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode label {
+  color: #f5f5f5;
+}
+
+/* Chart backgrounds (optional) */
+body.dark-mode canvas {
+  background-color: #1a1a1a;
+}
+
+
+
+.theme-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--accent-color);
+  color: white;
+  transition: background-color 0.3s;
+}
+.theme-btn:hover {
+  opacity: 0.8;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -175,6 +267,15 @@ button {
   border-radius: 20px;
   cursor: pointer;
   border: 0;
+}
+
+.clear-btn {
+  background-color: rgb(133, 7, 7);
+  color: white;
+}
+
+.clear-btn:hover {
+  background-color: red;
 }
 
 .buttons {

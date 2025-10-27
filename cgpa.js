@@ -19,10 +19,37 @@ const cumulativeGPA = document.querySelector(".Cumulative");
 const totalUnits = document.querySelector(".total--units");
 
 //Global Variables
-// let click = document.querySelectorAll(".semester--form").length;
+
+//Dark Mode toggle Logic
+if (
+  !localStorage.getItem("theme") &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches
+) {
+  document.body.classList.add("dark-mode");
+}
+
+const themeToggle = document.getElementById("theme-toggle");
+
+// Check saved theme in localStorage
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark-mode");
+  themeToggle.textContent = "☀️ Light Mode";
+}
+
+// Toggle theme on click
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+
+  if (document.body.classList.contains("dark-mode")) {
+    localStorage.setItem("theme", "dark");
+    themeToggle.textContent = "☀️ Light Mode";
+  } else {
+    localStorage.setItem("theme", "light");
+    themeToggle.textContent = "🌙 Dark Mode";
+  }
+});
 
 const semesterGPAs = [];
-  
 
 //Global Functions for the Logic
 
@@ -104,7 +131,6 @@ const newFormfield = function (click = 1) {
   const template = document.getElementById("semesterTemplate");
   const clone = template.content.cloneNode(true);
   const formField = clone.querySelector(".semester--form").cloneNode(true);
-  
 
   //Set the index
   formField.dataset.semester = click;
@@ -189,8 +215,6 @@ const handleSemesterDeletion = function (e) {
       `.semester--form[data-semester="${btnNum}"]`
     );
 
-    
-
     if (btnNum !== 1) {
       delField.remove();
 
@@ -264,7 +288,7 @@ const addCourseFunc = function (addCourseIndex) {
     .querySelectorAll("label")
     .forEach((lable) => lable.remove());
   semFormContainer.append(formInnerContainer);
-  updateCharts()
+  updateCharts();
 
   // console.log(semFormContainer);
 };
@@ -273,7 +297,6 @@ const addCourseFunc = function (addCourseIndex) {
 const deleteFormInputRow = function (e) {
   if (e.target.classList.contains("delete-row--icon")) {
     const rowToDelete = e.target.closest(".form--inner--container");
-  
 
     const checkDatasetNum = rowToDelete?.dataset?.semester;
 
@@ -290,7 +313,7 @@ const deleteFormInputRow = function (e) {
       rowToDelete.remove();
     }
 
-    deleteCourseRow(rowToDeleteWrapperNum, rowToDelete,checkDatasetNum);
+    deleteCourseRow(rowToDeleteWrapperNum, rowToDelete, checkDatasetNum);
     calculateSemesterGPA(rowToDeleteWrapperNum);
     calculateCGPA();
     updateCharts();
@@ -300,10 +323,7 @@ const deleteFormInputRow = function (e) {
 const saveToDataBase = function (e) {
   if (!e.target.classList.contains("submit")) return;
 
-  console.log(e.target);
-
   const allForms = document.querySelectorAll(".semester--form");
-  console.log(allForms);
 
   let allFilled = true;
 
@@ -403,22 +423,26 @@ const loadData = function () {
   });
 
   calculateCGPA();
-  updateCharts()
+  updateCharts();
   semester.querySelector(`.myBtn[data-semester="1"]`)?.click();
 };
 
 //Delete the course row that is saved in localStorage
-const deleteCourseRow = function (semesterIndex, rowIndex,checkDatasetNum) {
+const deleteCourseRow = function (semesterIndex, rowIndex, checkDatasetNum) {
   // Load stored data
   const saved = JSON.parse(localStorage.getItem("cgpaData"));
   if (!saved) return;
   console.log(saved);
-  
 
   // Remove the course
-if(checkDatasetNum){
-  saved.semesters[semesterIndex - 1].splice(rowIndex-1, 1,{ name: "", grade: "A", unit: "" });}else{
-      saved.semesters[semesterIndex - 1].splice(rowIndex, 1)
+  if (checkDatasetNum) {
+    saved.semesters[semesterIndex - 1].splice(rowIndex - 1, 1, {
+      name: "",
+      grade: "A",
+      unit: "",
+    });
+  } else {
+    saved.semesters[semesterIndex - 1].splice(rowIndex, 1);
   }
 
   // Re-save to localStorage
@@ -459,25 +483,34 @@ function clearAllData() {
 }
 
 // Deleting grade from gradeCounts to update pie Chart
-const recalculateGradCounts=function() {
+const recalculateGradCounts = function () {
   const gradeCounts = { A: 0, B: 0, C: 0, D: 0, F: 0 };
   console.log(gradeCounts);
-  
+
   document.querySelectorAll(".semester--form").forEach((form) => {
     form.querySelectorAll(".form--inner--container").forEach((row) => {
       const grade = row.querySelector(".options").value;
       const credit = parseFloat(row.querySelector(".C--unit").value);
 
       if (grade && !isNaN(credit) && credit > 0) {
-              if (gradeCounts[grade] !== undefined) gradeCounts[grade]++;
+        if (gradeCounts[grade] !== undefined) gradeCounts[grade]++;
       }
-
     });
   });
 
   console.log(gradeCounts);
   return gradeCounts; // ✅ Return the computed object
-}
+};
+
+//clear all data in local storage
+document.getElementById("clearData").addEventListener("click", () => {
+  alert(
+    "Are you sure you really want to clear all the data stored in your browser's storage?"
+  );
+  localStorage.removeItem("cgpaData");
+  alert("Saved data cleared!");
+  location.reload();
+});
 
 //Event Listeners
 
@@ -528,6 +561,15 @@ let sgpaChart, gradeChart;
 let chartType = "line"; // default type
 
 function updateCharts() {
+  //dark mode
+  if (document.body.classList.contains("dark-mode")) {
+    Chart.defaults.color = "#f5f5f5";
+    Chart.defaults.borderColor = "#444";
+  } else {
+    Chart.defaults.color = "#111";
+    Chart.defaults.borderColor = "#ccc";
+  }
+
   const labels = semesterGPAs.map((_, i) => `Semester ${i + 1}`);
   console.log(semesterGPAs);
   const gradeCounts = recalculateGradCounts();
